@@ -1,8 +1,0 @@
-account_id: '376871524090'
-aws_access_key_id: AKIAVPP2LC35K6GWMNVT
-aws_secret_access_key: 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
-deploy_target_bucket: cmtr-6e999703-task01-test
-extended_prefix_mode: false
-project_path: C:\WORK\Epam\aws\task01
-region: eu-central-1
-use_temp_creds: false
