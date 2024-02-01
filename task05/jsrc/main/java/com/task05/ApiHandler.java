@@ -66,7 +66,7 @@ public class ApiHandler implements RequestHandler<EventRequest, EventResponse> {
         attributesMap.put("body", new AttributeValue().withM(convertBody(event.getBody())));
 
         logger.info("Persist event");
-        amazonDynamoDB.putItem("Events", attributesMap);
+        amazonDynamoDB.putItem("cmtr-6e999703-Events-test", attributesMap);
     }
 
     private static Map<String, AttributeValue> convertBody(final Map<String, String> body) {
