@@ -1,11 +1,12 @@
 package com.task05;
 
+import static java.util.stream.Collectors.toMap;
+
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException;
-import com.amazonaws.services.dynamodbv2.model.PutItemResult;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.syndicate.deployment.annotations.lambda.LambdaHandler;
@@ -59,12 +60,17 @@ public class ApiHandler implements RequestHandler<EventRequest, EventResponse> {
 
     private void persistEvent(Event event) throws ConditionalCheckFailedException {
         Map<String, AttributeValue> attributesMap = new HashMap<>();
-        attributesMap.put("id", new AttributeValue(event.getId()));
-        attributesMap.put("principalId", new AttributeValue(String.valueOf(event.getPrincipalId())));
-        attributesMap.put("createdAt", new AttributeValue(event.getCreatedAt()));
-        attributesMap.put("body", new AttributeValue(String.valueOf(event.getBody())));
+        attributesMap.put("id", new AttributeValue().withS(event.getId()));
+        attributesMap.put("principalId", new AttributeValue().withN(String.valueOf(event.getPrincipalId())));
+        attributesMap.put("createdAt", new AttributeValue().withS(event.getCreatedAt()));
+        attributesMap.put("body", new AttributeValue().withM(convertBody(event.getBody())));
 
         logger.info("Persist event");
         amazonDynamoDB.putItem("Events", attributesMap);
+    }
+
+    private static Map<String, AttributeValue> convertBody(final Map<String, String> body) {
+        return body.entrySet().stream()
+            .collect(toMap(Map.Entry::getKey, e -> new AttributeValue().withS(e.getValue())));
     }
 }
