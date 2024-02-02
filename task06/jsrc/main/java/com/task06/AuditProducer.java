@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 public class AuditProducer implements RequestHandler<DynamodbEvent, Void> {
 
 	private static final Logger logger = Logger.getLogger(AuditProducer.class.getName());
-	private static final String AUDIT_TABLE = "Audit"; //cmtr-6e999703-Audit-test
+	private static final String AUDIT_TABLE = "cmtr-6e999703-Audit-test"; //cmtr-6e999703-Audit-test
 
 	private AmazonDynamoDB amazonDynamoDB;
 
@@ -67,8 +67,8 @@ public class AuditProducer implements RequestHandler<DynamodbEvent, Void> {
 		final AttributeValue key = convertAttribute(newImage, "key");
 
 		Map<String, AttributeValue> newValue = new HashMap<>();
-		newValue.put("key", new AttributeValue().withS("HELLO"));
-		newValue.put("value", new AttributeValue().withS("3000"));
+		newValue.put("key", key);
+		newValue.put("value", convertAttribute(newImage, "value"));
 
 		Map<String, AttributeValue> attributes = new HashMap<>();
 		attributes.put("id", new AttributeValue().withS(id));
