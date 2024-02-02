@@ -36,7 +36,7 @@ public class UuidGenerator implements RequestHandler<ScheduledEvent, Void> {
 		AmazonS3 s3Client = AmazonS3Client.builder().build();
 
 		final byte[] file = createFile();
-		final String fileName = ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_TIME) + ".json";
+		final String fileName = ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(file);
 		ObjectMetadata metadata = new ObjectMetadata();
 		metadata.setContentLength(file.length);
