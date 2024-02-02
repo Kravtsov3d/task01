@@ -92,6 +92,7 @@ public class AuditProducer implements RequestHandler<DynamodbEvent, Void> {
 		attributes.put("id", new AttributeValue().withS(id));
 		attributes.put("itemKey", key);
 		attributes.put("modificationTime", new AttributeValue().withS(modificationTime));
+		attributes.put("updatedAttribute", new AttributeValue().withS("value"));
 		attributes.put("oldValue", convertAttribute(oldImage, "value"));
 		attributes.put("newValue", convertAttribute(newImage, "value"));
 
