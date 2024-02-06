@@ -48,7 +48,7 @@ public class Processor implements RequestHandler<Object, Map<String, Object>> {
 	}
 
 	private String getMeteoData() {
-		String apiUrl = "https://api.open-meteo.com/v1/forecast?latitude=50.45&longitude=30.52&hourly=temperature_2m";
+		String apiUrl = "https://api.open-meteo.com/v1/forecast?latitude=50.4547&longitude=30.5238&hourly=temperature_2m&timezone=Europe%2FKyiv";
 
 		HttpClient client = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest.newBuilder()
