@@ -22,7 +22,6 @@ import org.open.meteo.OpenMeteo;
 @LambdaLayer(
 	layerName = "cmtr-6e999703-lambda-layer-test",
 	libraries = "task08-lib-1.0.0.jar",
-	layerFileName = "task08-1.0.0.jar",
 	runtime = DeploymentRuntime.JAVA11,
 	artifactExtension = ArtifactExtension.JAR
 )
