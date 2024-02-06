@@ -81,13 +81,13 @@ public class Processor implements RequestHandler<Object, Map<String, Object>> {
         logger.info("data = " + data);
 
         Map<String, AttributeValue> forecast = new HashMap<>();
-        forecast.put("latitude", new AttributeValue().withN(data.get("latitude").toString()));
-        forecast.put("longitude", new AttributeValue().withN(data.get("longitude").toString()));
-        forecast.put("generationtime_ms", new AttributeValue().withN(data.get("generationtime_ms").toString()));
-        forecast.put("utc_offset_seconds", new AttributeValue().withN(data.get("utc_offset_seconds").toString()));
+        forecast.put("latitude", new AttributeValue().withS(data.get("latitude").toString()));
+        forecast.put("longitude", new AttributeValue().withS(data.get("longitude").toString()));
+        forecast.put("generationtime_ms", new AttributeValue().withS(data.get("generationtime_ms").toString()));
+        forecast.put("utc_offset_seconds", new AttributeValue().withS(data.get("utc_offset_seconds").toString()));
         forecast.put("timezone", new AttributeValue().withS(data.get("timezone").toString()));
         forecast.put("timezone_abbreviation", new AttributeValue().withS(data.get("timezone_abbreviation").toString()));
-        forecast.put("elevation", new AttributeValue().withN(data.get("elevation").toString()));
+        forecast.put("elevation", new AttributeValue().withS(data.get("elevation").toString()));
 
         Map<String, AttributeValue> hourlyUnits = new HashMap<>();
         hourlyUnits.put("time", new AttributeValue().withS(((Map<String, Object>) data.get("hourly_units")).get("time").toString()));
@@ -98,7 +98,7 @@ public class Processor implements RequestHandler<Object, Map<String, Object>> {
         Map<String, AttributeValue> hourly = new HashMap<>();
         hourly.put("time", new AttributeValue().withSS(((List<Object>) ((Map<String, Object>) data.get("hourly")).get("time")).stream().map(
             x -> x.toString()).collect(Collectors.toList())));
-        hourly.put("temperature_2m", new AttributeValue().withNS(((List<Object>) ((Map<String, Object>) data.get("hourly")).get("temperature_2m")).stream().map(
+        hourly.put("temperature_2m", new AttributeValue().withSS(((List<Object>) ((Map<String, Object>) data.get("hourly")).get("temperature_2m")).stream().map(
             x -> x.toString()).collect(Collectors.toSet())));
 
         forecast.put("hourly", new AttributeValue().withM(hourly));
