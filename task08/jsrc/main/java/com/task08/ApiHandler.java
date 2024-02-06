@@ -2,6 +2,7 @@ package com.task08;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.syndicate.deployment.annotations.LambdaUrlConfig;
 import com.syndicate.deployment.annotations.lambda.LambdaHandler;
 
 import com.syndicate.deployment.annotations.lambda.LambdaLayer;
@@ -19,7 +20,8 @@ import java.util.Map;
 	layerFileName = "task08-1.0.0.jar",
 	artifactExtension = ArtifactExtension.JAR
 )
-public class  ApiHandler implements RequestHandler<Object, Map<String, Object>> {
+@LambdaUrlConfig
+public class ApiHandler implements RequestHandler<Object, Map<String, Object>> {
 
 	public Map<String, Object> handleRequest(Object request, Context context) {
 		System.out.println("Hello from lambda");

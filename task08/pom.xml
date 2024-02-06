@@ -30,42 +30,11 @@
             <artifactId>deployment-configuration-annotations</artifactId>
             <version>${deployment-configuration-annotations.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.open.meteo</groupId>
-            <artifactId>task08-lib</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/task08-lib-1.0.0.jar</systemPath>
-        </dependency>
     </dependencies>
 
     <build>
         <sourceDirectory>${src.dir}</sourceDirectory>
         <plugins>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.3.0</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>com.task08.ApiHandler</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <appendAssemblyId>false</appendAssemblyId>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>assembly</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>net.sf.aws-syndicate</groupId>
                 <artifactId>deployment-configuration-maven-plugin</artifactId>
