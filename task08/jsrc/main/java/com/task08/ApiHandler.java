@@ -1,22 +1,29 @@
-package com.task02;
+package com.task08;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.syndicate.deployment.annotations.LambdaUrlConfig;
 import com.syndicate.deployment.annotations.lambda.LambdaHandler;
 
+import com.syndicate.deployment.annotations.lambda.LambdaLayer;
+import com.syndicate.deployment.model.ArtifactExtension;
 import java.util.HashMap;
 import java.util.Map;
 
-@LambdaHandler(lambdaName = "hello_world",
-	roleName = "hello_world-role",
-	isPublishVersion = true
+@LambdaHandler(
+	lambdaName = "api_handler",
+	roleName = "api_handler-role",
+	layers = "cmtr-6e999703-lambda-layer-test"
 )
-@LambdaUrlConfig
-public class HelloWorld implements RequestHandler<Object, Map<String, Object>> {
+@LambdaLayer(
+	layerName = "cmtr-6e999703-lambda-layer-test",
+	layerFileName = "task08-1.0.0.jar",
+	artifactExtension = ArtifactExtension.JAR
+)
+public class  ApiHandler implements RequestHandler<Object, Map<String, Object>> {
 
 	public Map<String, Object> handleRequest(Object request, Context context) {
 		System.out.println("Hello from lambda");
+
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("statusCode", 200);
 		resultMap.put("body", "Hello from Lambda");
