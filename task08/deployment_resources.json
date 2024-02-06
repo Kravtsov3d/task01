@@ -34,5 +34,13 @@
     "allowed_accounts": [
       "${account_id}"
     ]
+  },
+  "cmtr-6e999703-lambda-layer-test": {
+    "name": "cmtr-6e999703-lambda-layer-test",
+    "resource_type": "lambda_layer",
+    "runtimes": [
+      "java11"
+    ],
+    "deployment_package": "task08-1.0.0.jar"
   }
 }
