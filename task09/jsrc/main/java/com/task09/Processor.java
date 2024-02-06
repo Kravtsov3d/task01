@@ -74,6 +74,6 @@ public class Processor implements RequestHandler<Object, Map<String, Object>> {
 		attributes.put("forecast", new AttributeValue().withS(meteoData));
 
 		logger.info("Save meteo data to Weather table");
-		amazonDynamoDB.putItem("Weather", attributes);
+		amazonDynamoDB.putItem("cmtr-6e999703-Weather-test", attributes);
 	}
 }
