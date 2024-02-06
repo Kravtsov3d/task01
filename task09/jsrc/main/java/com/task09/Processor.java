@@ -17,11 +17,13 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @LambdaHandler(
     lambdaName = "processor",
@@ -62,6 +64,7 @@ public class Processor implements RequestHandler<Object, Map<String, Object>> {
         try {
             logger.info("Get meteo data");
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            logger.info("body = " + response.body().getClass());
             logger.info("body = " + response.body());
             return response;
         } catch (IOException | InterruptedException e) {
@@ -72,15 +75,37 @@ public class Processor implements RequestHandler<Object, Map<String, Object>> {
     private void saveWeather(HttpResponse<String> meteoData) throws ConditionalCheckFailedException {
         final String id = String.valueOf(UUID.randomUUID());
 
-//        Gson gson = new Gson();
-//        Map<String, Object> data = gson.fromJson(meteoData, Map.class);
-//        logger.info("data = " + data);
+        Gson gson = new Gson();
 
-        logger.info("body = " + meteoData.body());
+        Map<String, Object> data = gson.fromJson(meteoData.body(), Map.class);
+        logger.info("data = " + data);
+
+        Map<String, AttributeValue> forecast = new HashMap<>();
+        forecast.put("latitude", new AttributeValue().withN(data.get("latitude").toString()));
+        forecast.put("longitude", new AttributeValue().withN(data.get("longitude").toString()));
+        forecast.put("generationtime_ms", new AttributeValue().withN(data.get("generationtime_ms").toString()));
+        forecast.put("utc_offset_seconds", new AttributeValue().withN(data.get("utc_offset_seconds").toString()));
+        forecast.put("timezone", new AttributeValue().withS(data.get("timezone").toString()));
+        forecast.put("timezone_abbreviation", new AttributeValue().withS(data.get("timezone_abbreviation").toString()));
+        forecast.put("elevation", new AttributeValue().withN(data.get("elevation").toString()));
+
+        Map<String, AttributeValue> hourlyUnits = new HashMap<>();
+        hourlyUnits.put("time", new AttributeValue().withS(((Map<String, Object>) data.get("hourly_units")).get("time").toString()));
+        hourlyUnits.put("temperature_2m", new AttributeValue().withS(((Map<String, Object>) data.get("hourly_units")).get("temperature_2m").toString()));
+
+        forecast.put("hourly_units", new AttributeValue().withM(hourlyUnits));
+
+        Map<String, AttributeValue> hourly = new HashMap<>();
+        hourly.put("time", new AttributeValue().withSS(((List<Object>) ((Map<String, Object>) data.get("hourly")).get("time")).stream().map(
+            x -> x.toString()).collect(Collectors.toList())));
+        hourly.put("temperature_2m", new AttributeValue().withNS(((List<Object>) ((Map<String, Object>) data.get("hourly")).get("temperature_2m")).stream().map(
+            x -> x.toString()).collect(Collectors.toSet())));
+
+        forecast.put("hourly", new AttributeValue().withM(hourly));
 
         Map<String, AttributeValue> attributes = new HashMap<>();
         attributes.put("id", new AttributeValue().withS(id));
-        attributes.put("forecast", new AttributeValue(meteoData.body()));
+        attributes.put("forecast", new AttributeValue().withM(forecast));
 
         logger.info("Save meteo data to Weather table");
         amazonDynamoDB.putItem("cmtr-6e999703-Weather-test", attributes);//cmtr-6e999703-Weather-test
