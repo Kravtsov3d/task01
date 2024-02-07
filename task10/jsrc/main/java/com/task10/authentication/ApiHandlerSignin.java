@@ -9,6 +9,7 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.syndicate.deployment.annotations.lambda.LambdaHandler;
 import com.task10.authentication.model.SigninRequest;
+import com.task10.authentication.model.SigninResponse;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
@@ -16,11 +17,11 @@ import java.util.logging.Logger;
 	lambdaName = "api_handler_signin",
 	roleName = "api_handler_signin-role"
 )
-public class ApiHandlerSignin implements RequestHandler<SigninRequest, InitiateAuthResult> {
+public class ApiHandlerSignin implements RequestHandler<SigninRequest, SigninResponse> {
 
 	private static final Logger logger = Logger.getLogger(ApiHandlerSignin.class.getName());
 
-	public InitiateAuthResult handleRequest(SigninRequest  request, Context context) {
+	public SigninResponse handleRequest(SigninRequest  request, Context context) {
 		logger.info("request = " + request);
 
 
@@ -37,7 +38,6 @@ public class ApiHandlerSignin implements RequestHandler<SigninRequest, InitiateA
 
 		logger.info("Start SignIn");
 		final InitiateAuthResult result = cognito.initiateAuth(signInRequest);
-		logger.info("result = " + result);
-		return result;
+		return new SigninResponse(result.getAuthenticationResult().getIdToken());
 	}
 }

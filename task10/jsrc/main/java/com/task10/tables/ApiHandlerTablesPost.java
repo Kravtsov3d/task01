@@ -16,6 +16,7 @@ public class ApiHandlerTablesPost implements RequestHandler<Object, Map<String, 
 
 	public Map<String, Object> handleRequest(Object request, Context context) {
 		System.out.println("Hello from lambda");
+
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("statusCode", 200);
 		resultMap.put("body", "Hello from Lambda");

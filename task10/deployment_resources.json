@@ -14,7 +14,8 @@
             "dynamodb:DeleteItem",
             "ssm:PutParameter",
             "ssm:GetParameter",
-            "kms:Decrypt"
+            "kms:Decrypt",
+            "cognito-idp:*"
           ],
           "Effect": "Allow",
           "Resource": "*"
@@ -57,7 +58,9 @@
     },
     "auto_verified_attributes": [],
     "sms_configuration": {},
-    "username_attributes": [],
+    "username_attributes": [
+      "email"
+    ],
     "custom_attributes": [
       {
         "name": "firstName",
@@ -70,7 +73,10 @@
     ],
     "client": {
       "client_name": "cmtr-6e999703-app-client-test",
-      "generate_secret": false
+      "generate_secret": false,
+      "explicit_auth_flows": [
+        "USER_PASSWORD_AUTH"
+      ]
     }
   },
   "api_handler_signup-role": {

@@ -7,6 +7,7 @@ public class SignupRequest {
     private String email;
     private String password;
     private String clientId;
+    private String userPoolId;
 
     public String getFirstName() {
         return firstName;
@@ -48,6 +49,14 @@ public class SignupRequest {
         this.clientId = clientId;
     }
 
+    public String getUserPoolId() {
+        return userPoolId;
+    }
+
+    public void setUserPoolId(final String userPoolId) {
+        this.userPoolId = userPoolId;
+    }
+
     @Override
     public String toString() {
         return "SignupRequest{" +
@@ -56,6 +65,7 @@ public class SignupRequest {
             ", email='" + email + '\'' +
             ", password='" + password + '\'' +
             ", clientId='" + clientId + '\'' +
+            ", userPoolId='" + userPoolId + '\'' +
             '}';
     }
 }
