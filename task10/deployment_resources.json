@@ -24,17 +24,6 @@
     },
     "resource_type": "iam_policy"
   },
-  "api_handler-role": {
-    "predefined_policies": [],
-    "principal_service": "lambda",
-    "custom_policies": [
-      "lambda-basic-execution"
-    ],
-    "resource_type": "iam_role",
-    "allowed_accounts": [
-      "${account_id}"
-    ]
-  },
   "Tables": {
     "resource_type": "dynamodb_table",
     "hash_key_name": "id",
@@ -72,9 +61,188 @@
     "custom_attributes": [
       {
         "name": "firstName",
-        "type": "lastName"
+        "type": "String"
+      },
+      {
+        "name": "lastName",
+        "type": "String"
       }
     ],
-    "client": {}
+    "client": {
+      "client_name": "cmtr-6e999703-app-client-test",
+      "generate_secret": false
+    }
+  },
+  "api_handler_signup-role": {
+    "predefined_policies": [],
+    "principal_service": "lambda",
+    "custom_policies": [
+      "lambda-basic-execution"
+    ],
+    "resource_type": "iam_role",
+    "allowed_accounts": [
+      "${account_id}"
+    ]
+  },
+  "api_handler_signin-role": {
+    "predefined_policies": [],
+    "principal_service": "lambda",
+    "custom_policies": [
+      "lambda-basic-execution"
+    ],
+    "resource_type": "iam_role",
+    "allowed_accounts": [
+      "${account_id}"
+    ]
+  },
+  "api_handler_tables_get_all-role": {
+    "predefined_policies": [],
+    "principal_service": "lambda",
+    "custom_policies": [
+      "lambda-basic-execution"
+    ],
+    "resource_type": "iam_role",
+    "allowed_accounts": [
+      "${account_id}"
+    ]
+  },
+  "api_handler_tables_get_by_id-role": {
+    "predefined_policies": [],
+    "principal_service": "lambda",
+    "custom_policies": [
+      "lambda-basic-execution"
+    ],
+    "resource_type": "iam_role",
+    "allowed_accounts": [
+      "${account_id}"
+    ]
+  },
+  "api_handler_tables_post-role": {
+    "predefined_policies": [],
+    "principal_service": "lambda",
+    "custom_policies": [
+      "lambda-basic-execution"
+    ],
+    "resource_type": "iam_role",
+    "allowed_accounts": [
+      "${account_id}"
+    ]
+  },
+  "api_handler_reservations_post-role": {
+    "predefined_policies": [],
+    "principal_service": "lambda",
+    "custom_policies": [
+      "lambda-basic-execution"
+    ],
+    "resource_type": "iam_role",
+    "allowed_accounts": [
+      "${account_id}"
+    ]
+  },
+  "api_handler_reservations_get_all-role": {
+    "predefined_policies": [],
+    "principal_service": "lambda",
+    "custom_policies": [
+      "lambda-basic-execution"
+    ],
+    "resource_type": "iam_role",
+    "allowed_accounts": [
+      "${account_id}"
+    ]
+  },
+  "task10_api": {
+    "resource_type": "api_gateway",
+    "deploy_stage": "api",
+    "authorizers": {
+      "authorizer": {
+        "type": "COGNITO_USER_POOLS",
+        "identity_source": "method.request.header.Authorization",
+        "user_pools": [
+          "simple-booking-userpool"
+        ],
+        "ttl": 300
+      }
+    },
+    "dependencies": [
+      {
+        "resource_name": "api_handler_signup",
+        "resource_type": "lambda"
+      },
+      {
+        "resource_name": "api_handler_signin",
+        "resource_type": "lambda"
+      },
+      {
+        "resource_name": "api_handler_tables_get_all",
+        "resource_type": "lambda"
+      },
+      {
+        "resource_name": "api_handler_tables_get_by_id",
+        "resource_type": "lambda"
+      },
+      {
+        "resource_name": "api_handler_tables_post",
+        "resource_type": "lambda"
+      },
+      {
+        "resource_name": "api_handler_reservations_post",
+        "resource_type": "lambda"
+      },
+      {
+        "resource_name": "api_handler_reservations_get_all",
+        "resource_type": "lambda"
+      }
+    ],
+    "resources": {
+      "/signup": {
+        "POST": {
+          "authorization_type": "NONE",
+          "integration_type": "lambda",
+          "lambda_name": "api_handler_signup"
+        }
+      },
+      "/signin": {
+        "POST": {
+          "authorization_type": "NONE",
+          "integration_type": "lambda",
+          "lambda_name": "api_handler_signin"
+        }
+      },
+      "/tables": {
+        "GET": {
+          "authorization_type": "authorizer",
+          "integration_type": "lambda",
+          "lambda_name": "api_handler_tables_get_all"
+        }
+      },
+      "/tables/{tableId}": {
+        "GET": {
+          "authorization_type": "authorizer",
+          "integration_type": "lambda",
+          "lambda_name": "api_handler_tables_get_by_id"
+        }
+      },
+      "/tables": {
+        "POST": {
+          "authorization_type": "authorizer",
+          "integration_type": "lambda",
+          "lambda_name": "api_handler_tables_post"
+        }
+      },
+      "/reservations": {
+        "POST": {
+          "authorization_type": "authorizer",
+          "integration_type": "lambda",
+          "lambda_name": "api_handler_reservations_post"
+        }
+      },
+      "/reservations": {
+        "GET": {
+          "authorization_type": "authorizer",
+          "integration_type": "lambda",
+          "lambda_name": "api_handler_reservations_get_all"
+        }
+      }
+    }
   }
 }
