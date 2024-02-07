@@ -223,6 +223,11 @@
           "authorization_type": "authorizer",
           "integration_type": "lambda",
           "lambda_name": "api_handler_tables_get_all"
+        },
+        "POST": {
+          "authorization_type": "authorizer",
+          "integration_type": "lambda",
+          "lambda_name": "api_handler_tables_post"
         }
       },
       "/tables/{tableId}": {
@@ -232,25 +237,16 @@
           "lambda_name": "api_handler_tables_get_by_id"
         }
       },
-      "/tables": {
-        "POST": {
-          "authorization_type": "authorizer",
-          "integration_type": "lambda",
-          "lambda_name": "api_handler_tables_post"
-        }
-      },
-      "/reservations": {
-        "POST": {
-          "authorization_type": "authorizer",
-          "integration_type": "lambda",
-          "lambda_name": "api_handler_reservations_post"
-        }
-      },
       "/reservations": {
         "GET": {
           "authorization_type": "authorizer",
           "integration_type": "lambda",
           "lambda_name": "api_handler_reservations_get_all"
+        },
+        "POST": {
+          "authorization_type": "authorizer",
+          "integration_type": "lambda",
+          "lambda_name": "api_handler_reservations_post"
         }
       }
     }

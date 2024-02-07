@@ -3,19 +3,20 @@ package com.task10.tables;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.syndicate.deployment.annotations.lambda.LambdaHandler;
-
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
-@LambdaHandler(lambdaName = "api_handler_tables_post",
-	roleName = "api_handler_tables_post-role",
-	isPublishVersion = true,
-	aliasName = "${lambdas_alias_name}"
+@LambdaHandler(
+	lambdaName = "api_handler_tables_post",
+	roleName = "api_handler_tables_post-role"
 )
 public class ApiHandlerTablesPost implements RequestHandler<Object, Map<String, Object>> {
 
+	private static final Logger logger = Logger.getLogger(ApiHandlerTablesPost.class.getName());
+
 	public Map<String, Object> handleRequest(Object request, Context context) {
-		System.out.println("Hello from lambda");
+		logger.info("Start TablesGetById");
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("statusCode", 200);
