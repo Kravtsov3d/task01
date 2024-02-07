@@ -5,10 +5,6 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;
-import com.amazonaws.services.dynamodbv2.document.ItemCollection;
-import com.amazonaws.services.dynamodbv2.document.ScanOutcome;
-import com.amazonaws.services.dynamodbv2.document.spec.ScanSpec;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.syndicate.deployment.annotations.lambda.LambdaHandler;
@@ -27,15 +23,17 @@ public class ApiHandlerReservationsGetAll implements RequestHandler<Object, Map<
 	private static final Logger logger = Logger.getLogger(ApiHandlerReservationsGetAll.class.getName());
 
 	public Map<String, List<Reservation>> handleRequest(Object request, Context context) {
-		AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.defaultClient();
-		DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDB);
+		logger.info("Start ReservationsGetAll");
+		logger.info("request = " + request);
+
+		AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
+		DynamoDBMapper mapper = new DynamoDBMapper(client);
 
 		DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
-		PaginatedScanList<Reservation> scanResult = mapper.scan(Reservation.class, scanExpression);
-		final ItemCollection<ScanOutcome> reservations = dynamoDB.getTable("Reservations").scan(scanSpec);//cmtr-6e999703-Reservations-test
+		PaginatedScanList<Reservation> result = mapper.scan(Reservation.class, scanExpression);
 
 		Map<String, List<Reservation>> resultMap = new HashMap<>();
-		resultMap.put("reservations", null);
+		resultMap.put("reservations", result);
 		return resultMap;
 	}
 }

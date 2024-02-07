@@ -4,7 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
-@DynamoDBTable(tableName="Reservation")
+@DynamoDBTable(tableName="Reservation")//cmtr-6e999703-Reservations-test
 public class Reservation {
 
     @DynamoDBHashKey(attributeName="tableNumber")

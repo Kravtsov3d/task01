@@ -1,11 +1,21 @@
 package com.task10.tables.model;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+
+@DynamoDBTable(tableName="Table")//cmtr-6e999703-Tables-test
 public class Table {
 
+    @DynamoDBHashKey(attributeName="id")
     private int id;
+    @DynamoDBAttribute(attributeName="number")
     private int number;
+    @DynamoDBAttribute(attributeName="places")
     private int places;
+    @DynamoDBAttribute(attributeName="isVip")
     private boolean isVip;
+    @DynamoDBAttribute(attributeName="minOrder")
     private int minOrder;
 
     public int getId() {
