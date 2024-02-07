@@ -5,7 +5,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
-@DynamoDBTable(tableName="Table")//cmtr-6e999703-Tables-test
+@DynamoDBTable(tableName="Tables")//cmtr-6e999703-Tables-test
 public class Table {
 
     private int id;

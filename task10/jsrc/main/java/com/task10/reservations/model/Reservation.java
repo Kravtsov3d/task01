@@ -5,7 +5,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
-@DynamoDBTable(tableName="Reservation")//cmtr-6e999703-Reservations-test
+@DynamoDBTable(tableName="Reservations")//cmtr-6e999703-Reservations-test
 public class Reservation {
 
     private int tableNumber;
