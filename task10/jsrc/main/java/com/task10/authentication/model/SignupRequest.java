@@ -6,8 +6,6 @@ public class SignupRequest {
     private String lastName;
     private String email;
     private String password;
-    private String clientId;
-    private String userPoolId;
 
     public String getFirstName() {
         return firstName;
@@ -41,22 +39,6 @@ public class SignupRequest {
         this.password = password;
     }
 
-    public String getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(final String clientId) {
-        this.clientId = clientId;
-    }
-
-    public String getUserPoolId() {
-        return userPoolId;
-    }
-
-    public void setUserPoolId(final String userPoolId) {
-        this.userPoolId = userPoolId;
-    }
-
     @Override
     public String toString() {
         return "SignupRequest{" +
@@ -64,8 +46,6 @@ public class SignupRequest {
             ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +
             ", password='" + password + '\'' +
-            ", clientId='" + clientId + '\'' +
-            ", userPoolId='" + userPoolId + '\'' +
             '}';
     }
 }

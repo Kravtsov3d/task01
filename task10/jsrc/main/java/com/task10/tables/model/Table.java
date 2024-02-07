@@ -41,11 +41,11 @@ public class Table {
     }
 
     @DynamoDBAttribute(attributeName="isVip")
-    public Boolean isVip() {
+    public Boolean getIsVip() {
         return isVip;
     }
 
-    public void setVip(final Boolean vip) {
+    public void setIsVip(final Boolean vip) {
         isVip = vip;
     }
 

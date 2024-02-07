@@ -4,6 +4,10 @@ import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProviderClientBuilder;
 import com.amazonaws.services.cognitoidp.model.AdminConfirmSignUpRequest;
 import com.amazonaws.services.cognitoidp.model.AttributeType;
+import com.amazonaws.services.cognitoidp.model.ListUserPoolClientsRequest;
+import com.amazonaws.services.cognitoidp.model.ListUserPoolClientsResult;
+import com.amazonaws.services.cognitoidp.model.ListUserPoolsRequest;
+import com.amazonaws.services.cognitoidp.model.ListUserPoolsResult;
 import com.amazonaws.services.cognitoidp.model.SignUpRequest;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -26,12 +30,23 @@ public class ApiHandlerSignup implements RequestHandler<SignupRequest, Void> {
 
         AWSCognitoIdentityProvider cognito = AWSCognitoIdentityProviderClientBuilder.defaultClient();
 
+        ListUserPoolsRequest listUserPoolsRequest = new ListUserPoolsRequest().withMaxResults(10);
+        ListUserPoolsResult userPool = cognito.listUserPools(listUserPoolsRequest);
+        String userPoolId = userPool.getUserPools().get(0).getId();
+        logger.info("userPoolId = " + userPoolId);
+
+        ListUserPoolClientsRequest userPoolClientsRequest = new ListUserPoolClientsRequest().withUserPoolId(userPoolId);
+        ListUserPoolClientsResult userPoolClientsResult = cognito.listUserPoolClients(userPoolClientsRequest);
+
+        String appClientId = userPoolClientsResult.getUserPoolClients().get(0).getClientId();
+        logger.info("appClientId = " + appClientId);
+
         List<AttributeType> attributes = new ArrayList<>();
         attributes.add(new AttributeType().withName("custom:firstName").withValue(request.getFirstName()));
         attributes.add(new AttributeType().withName("custom:lastName").withValue(request.getLastName()));
 
         SignUpRequest signUpRequest = new SignUpRequest()
-            .withClientId(request.getClientId())
+            .withClientId(appClientId)
             .withUsername(request.getEmail())
             .withPassword(request.getPassword())
             .withUserAttributes(attributes);
@@ -41,7 +56,7 @@ public class ApiHandlerSignup implements RequestHandler<SignupRequest, Void> {
 
         AdminConfirmSignUpRequest confirmSignUpRequest = new AdminConfirmSignUpRequest()
             .withUsername(request.getEmail())
-            .withUserPoolId(request.getUserPoolId());
+            .withUserPoolId(userPoolId);
 
         logger.info("Start ConfirmSignUp");
         cognito.adminConfirmSignUp(confirmSignUpRequest);
