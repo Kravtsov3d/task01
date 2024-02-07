@@ -10,20 +10,18 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.syndicate.deployment.annotations.lambda.LambdaHandler;
 import com.task10.authentication.model.SignupRequest;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 @LambdaHandler(
     lambdaName = "api_handler_signup",
     roleName = "api_handler_signup-role"
 )
-public class ApiHandlerSignup implements RequestHandler<SignupRequest, Map<String, Object>> {
+public class ApiHandlerSignup implements RequestHandler<SignupRequest, Void> {
 
     private static final Logger logger = Logger.getLogger(ApiHandlerSignup.class.getName());
 
-    public Map<String, Object> handleRequest(SignupRequest request, Context context) {
+    public Void handleRequest(SignupRequest request, Context context) {
         logger.info("request = " + request);
 
         AWSCognitoIdentityProvider cognito = AWSCognitoIdentityProviderClientBuilder.defaultClient();
@@ -48,8 +46,6 @@ public class ApiHandlerSignup implements RequestHandler<SignupRequest, Map<Strin
         logger.info("Start ConfirmSignUp");
         cognito.adminConfirmSignUp(confirmSignUpRequest);
 
-        Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("statusCode", 200);
-        return resultMap;
+        return null;
     }
 }

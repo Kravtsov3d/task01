@@ -2,22 +2,19 @@ package com.task10.tables.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 @DynamoDBTable(tableName="Table")//cmtr-6e999703-Tables-test
 public class Table {
 
-    @DynamoDBHashKey(attributeName="id")
     private int id;
-    @DynamoDBAttribute(attributeName="number")
     private int number;
-    @DynamoDBAttribute(attributeName="places")
     private int places;
-    @DynamoDBAttribute(attributeName="isVip")
     private boolean isVip;
-    @DynamoDBAttribute(attributeName="minOrder")
     private int minOrder;
 
+    @DynamoDBHashKey(attributeName="id")
     public int getId() {
         return id;
     }
@@ -26,6 +23,7 @@ public class Table {
         this.id = id;
     }
 
+    @DynamoDBRangeKey(attributeName="number")
     public int getNumber() {
         return number;
     }
@@ -34,6 +32,7 @@ public class Table {
         this.number = number;
     }
 
+    @DynamoDBAttribute(attributeName="places")
     public int getPlaces() {
         return places;
     }
@@ -42,6 +41,7 @@ public class Table {
         this.places = places;
     }
 
+    @DynamoDBAttribute(attributeName="isVip")
     public boolean isVip() {
         return isVip;
     }
@@ -50,6 +50,7 @@ public class Table {
         isVip = vip;
     }
 
+    @DynamoDBAttribute(attributeName="minOrder")
     public int getMinOrder() {
         return minOrder;
     }

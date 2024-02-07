@@ -2,24 +2,20 @@ package com.task10.reservations.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 @DynamoDBTable(tableName="Reservation")//cmtr-6e999703-Reservations-test
 public class Reservation {
 
-    @DynamoDBHashKey(attributeName="tableNumber")
     private int tableNumber;
-    @DynamoDBAttribute(attributeName="clientName")
     private String clientName;
-    @DynamoDBAttribute(attributeName="phoneNumber")
     private String phoneNumber;
-    @DynamoDBAttribute(attributeName="date")
     private String date;
-    @DynamoDBAttribute(attributeName="slotTimeStart")
     private String slotTimeStart;
-    @DynamoDBAttribute(attributeName="slotTimeEnd")
     private String slotTimeEnd;
 
+    @DynamoDBHashKey(attributeName="tableNumber")
     public int getTableNumber() {
         return tableNumber;
     }
@@ -28,6 +24,7 @@ public class Reservation {
         this.tableNumber = tableNumber;
     }
 
+    @DynamoDBRangeKey(attributeName="clientName")
     public String getClientName() {
         return clientName;
     }
@@ -36,6 +33,7 @@ public class Reservation {
         this.clientName = clientName;
     }
 
+    @DynamoDBAttribute(attributeName="phoneNumber")
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -44,6 +42,7 @@ public class Reservation {
         this.phoneNumber = phoneNumber;
     }
 
+    @DynamoDBAttribute(attributeName="date")
     public String getDate() {
         return date;
     }
@@ -52,6 +51,7 @@ public class Reservation {
         this.date = date;
     }
 
+    @DynamoDBAttribute(attributeName="slotTimeStart")
     public String getSlotTimeStart() {
         return slotTimeStart;
     }
@@ -60,6 +60,7 @@ public class Reservation {
         this.slotTimeStart = slotTimeStart;
     }
 
+    @DynamoDBAttribute(attributeName="slotTimeEnd")
     public String getSlotTimeEnd() {
         return slotTimeEnd;
     }
