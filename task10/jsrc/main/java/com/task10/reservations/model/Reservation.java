@@ -8,7 +8,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 @DynamoDBTable(tableName="Reservations")//cmtr-6e999703-Reservations-test
 public class Reservation {
 
-    private int tableNumber;
+    private Integer tableNumber;
     private String clientName;
     private String phoneNumber;
     private String date;
@@ -16,11 +16,11 @@ public class Reservation {
     private String slotTimeEnd;
 
     @DynamoDBHashKey(attributeName="tableNumber")
-    public int getTableNumber() {
+    public Integer getTableNumber() {
         return tableNumber;
     }
 
-    public void setTableNumber(final int tableNumber) {
+    public void setTableNumber(final Integer tableNumber) {
         this.tableNumber = tableNumber;
     }
 

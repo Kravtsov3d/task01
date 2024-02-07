@@ -25,8 +25,6 @@
     "resource_type": "dynamodb_table",
     "hash_key_name": "id",
     "hash_key_type": "N",
-    "sort_key_name": "number",
-    "sort_key_type": "N",
     "read_capacity": 1,
     "write_capacity": 1,
     "global_indexes": [],
@@ -230,7 +228,8 @@
         "GET": {
           "authorization_type": "authorizer",
           "integration_type": "lambda",
-          "lambda_name": "api_handler_tables_get_by_id"
+          "lambda_name": "api_handler_tables_get_by_id",
+          "enable_proxy": true
         }
       },
       "/reservations": {
