@@ -202,14 +202,16 @@
         "POST": {
           "authorization_type": "NONE",
           "integration_type": "lambda",
-          "lambda_name": "api_handler_signup"
+          "lambda_name": "api_handler_signup",
+          "enable_proxy": true
         }
       },
       "/signin": {
         "POST": {
           "authorization_type": "NONE",
           "integration_type": "lambda",
-          "lambda_name": "api_handler_signin"
+          "lambda_name": "api_handler_signin",
+          "enable_proxy": true
         }
       },
       "/tables": {
@@ -245,5 +247,16 @@
         }
       }
     }
+  },
+  "api_handler-role": {
+    "predefined_policies": [],
+    "principal_service": "lambda",
+    "custom_policies": [
+      "lambda-basic-execution"
+    ],
+    "resource_type": "iam_role",
+    "allowed_accounts": [
+      "${account_id}"
+    ]
   }
 }

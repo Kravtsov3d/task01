@@ -1,5 +1,7 @@
 package com.task10.authentication;
 
+import static com.task10.util.Util.convertFromJson;
+
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProviderClientBuilder;
 import com.amazonaws.services.cognitoidp.model.AdminConfirmSignUpRequest;
@@ -9,8 +11,11 @@ import com.amazonaws.services.cognitoidp.model.ListUserPoolClientsResult;
 import com.amazonaws.services.cognitoidp.model.ListUserPoolsRequest;
 import com.amazonaws.services.cognitoidp.model.ListUserPoolsResult;
 import com.amazonaws.services.cognitoidp.model.SignUpRequest;
+import com.amazonaws.services.cognitoidp.model.SignUpResult;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.syndicate.deployment.annotations.lambda.LambdaHandler;
 import com.task10.authentication.model.SignupRequest;
 import java.util.ArrayList;
@@ -21,12 +26,14 @@ import java.util.logging.Logger;
     lambdaName = "api_handler_signup",
     roleName = "api_handler_signup-role"
 )
-public class ApiHandlerSignup implements RequestHandler<SignupRequest, Void> {
+public class ApiHandlerSignup implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     private static final Logger logger = Logger.getLogger(ApiHandlerSignup.class.getName());
 
-    public Void handleRequest(SignupRequest request, Context context) {
+    public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
+        logger.info("Start Signup");
         logger.info("request = " + request);
+        final SignupRequest signupRequest = convertFromJson(request.getBody(), SignupRequest.class);
 
         AWSCognitoIdentityProvider cognito = AWSCognitoIdentityProviderClientBuilder.defaultClient();
 
@@ -42,25 +49,34 @@ public class ApiHandlerSignup implements RequestHandler<SignupRequest, Void> {
         logger.info("appClientId = " + appClientId);
 
         List<AttributeType> attributes = new ArrayList<>();
-        attributes.add(new AttributeType().withName("custom:firstName").withValue(request.getFirstName()));
-        attributes.add(new AttributeType().withName("custom:lastName").withValue(request.getLastName()));
+        attributes.add(new AttributeType().withName("custom:firstName").withValue(signupRequest.getFirstName()));
+        attributes.add(new AttributeType().withName("custom:lastName").withValue(signupRequest.getLastName()));
 
         SignUpRequest signUpRequest = new SignUpRequest()
             .withClientId(appClientId)
-            .withUsername(request.getEmail())
-            .withPassword(request.getPassword())
+            .withUsername(signupRequest.getEmail())
+            .withPassword(signupRequest.getPassword())
             .withUserAttributes(attributes);
 
-        logger.info("Start SignUp");
-        cognito.signUp(signUpRequest);
+        try {
+            logger.info("Start SignUp");
+            final SignUpResult signUpResult = cognito.signUp(signUpRequest);
+            logger.info("signUpResult = " + signUpResult);
+        } catch (Exception e) {
+            APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
+            response.setStatusCode(400);
+            return response;
+        }
 
         AdminConfirmSignUpRequest confirmSignUpRequest = new AdminConfirmSignUpRequest()
-            .withUsername(request.getEmail())
+            .withUsername(signupRequest.getEmail())
             .withUserPoolId(userPoolId);
 
         logger.info("Start ConfirmSignUp");
         cognito.adminConfirmSignUp(confirmSignUpRequest);
 
-        return null;
+        APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
+        response.setStatusCode(200);
+        return response;
     }
 }

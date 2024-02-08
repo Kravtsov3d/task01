@@ -1,5 +1,7 @@
 package com.task10.tables;
 
+import static com.task10.util.Util.convertToJson;
+
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -7,8 +9,6 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syndicate.deployment.annotations.lambda.LambdaHandler;
 import com.task10.tables.model.Table;
 import java.util.logging.Logger;
@@ -38,13 +38,5 @@ public class ApiHandlerTablesGetById implements RequestHandler<APIGatewayProxyRe
         responseEvent.setStatusCode(200);
         responseEvent.setBody(convertToJson(table));
         return responseEvent;
-    }
-
-    private static String convertToJson(final Table table) {
-        try {
-            return new ObjectMapper().writeValueAsString(table);
-        } catch (JsonProcessingException e) {
-            throw new IllegalStateException(e);
-        }
     }
 }

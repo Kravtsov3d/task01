@@ -7,6 +7,7 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.syndicate.deployment.annotations.lambda.LambdaHandler;
 import com.task10.reservations.model.Reservation;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 @LambdaHandler(
@@ -24,6 +25,7 @@ public class ApiHandlerReservationsPost implements RequestHandler<Reservation, V
 		AmazonDynamoDB client = AmazonDynamoDBClientBuilder.defaultClient();
 		DynamoDBMapper mapper = new DynamoDBMapper(client);
 
+		request.setId(UUID.randomUUID().toString());
 		mapper.save(request);
 		return null;
 	}

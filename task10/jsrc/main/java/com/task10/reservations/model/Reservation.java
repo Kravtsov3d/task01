@@ -2,12 +2,14 @@ package com.task10.reservations.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @DynamoDBTable(tableName="Reservations")//cmtr-6e999703-Reservations-test
 public class Reservation {
 
+    @JsonIgnore
+    private String id;
     private Integer tableNumber;
     private String clientName;
     private String phoneNumber;
@@ -15,7 +17,16 @@ public class Reservation {
     private String slotTimeStart;
     private String slotTimeEnd;
 
-    @DynamoDBHashKey(attributeName="tableNumber")
+    @DynamoDBHashKey(attributeName="id")
+    public String getId() {
+        return id;
+    }
+
+    public void setId(final String id) {
+        this.id = id;
+    }
+
+    @DynamoDBAttribute(attributeName="tableNumber")
     public Integer getTableNumber() {
         return tableNumber;
     }
@@ -24,7 +35,7 @@ public class Reservation {
         this.tableNumber = tableNumber;
     }
 
-    @DynamoDBRangeKey(attributeName="clientName")
+    @DynamoDBAttribute(attributeName="clientName")
     public String getClientName() {
         return clientName;
     }
@@ -67,17 +78,5 @@ public class Reservation {
 
     public void setSlotTimeEnd(final String slotTimeEnd) {
         this.slotTimeEnd = slotTimeEnd;
-    }
-
-    @Override
-    public String toString() {
-        return "Reservation{" +
-            "tableNumber=" + tableNumber +
-            ", clientName='" + clientName + '\'' +
-            ", phoneNumber='" + phoneNumber + '\'' +
-            ", date='" + date + '\'' +
-            ", slotTimeStart='" + slotTimeStart + '\'' +
-            ", slotTimeEnd='" + slotTimeEnd + '\'' +
-            '}';
     }
 }
