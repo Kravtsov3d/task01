@@ -6,6 +6,9 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syndicate.deployment.annotations.lambda.LambdaHandler;
 import com.task10.tables.model.Table;
 import java.util.logging.Logger;
@@ -14,11 +17,11 @@ import java.util.logging.Logger;
     lambdaName = "api_handler_tables_get_by_id",
     roleName = "api_handler_tables_get_by_id-role"
 )
-public class ApiHandlerTablesGetById implements RequestHandler<APIGatewayProxyRequestEvent, Table> {
+public class ApiHandlerTablesGetById implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     private static final Logger logger = Logger.getLogger(ApiHandlerTablesGetById.class.getName());
 
-    public Table handleRequest(APIGatewayProxyRequestEvent event, Context context) {
+    public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent event, Context context) {
         logger.info("Start TablesGetById");
 
         String tableId = event.getPathParameters().get("tableId");
@@ -28,8 +31,20 @@ public class ApiHandlerTablesGetById implements RequestHandler<APIGatewayProxyRe
         DynamoDBMapper mapper = new DynamoDBMapper(client);
 
         logger.info("Load from Tables");
-        final Table result = mapper.load(Table.class, Integer.valueOf(tableId));
-        logger.info("result = " + result);
-        return result;
+        final Table table = mapper.load(Table.class, Integer.valueOf(tableId));
+        logger.info("table = " + table);
+
+        APIGatewayProxyResponseEvent responseEvent = new APIGatewayProxyResponseEvent();
+        responseEvent.setStatusCode(200);
+        responseEvent.setBody(convertToJson(table));
+        return responseEvent;
+    }
+
+    private static String convertToJson(final Table table) {
+        try {
+            return new ObjectMapper().writeValueAsString(table);
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException(e);
+        }
     }
 }
