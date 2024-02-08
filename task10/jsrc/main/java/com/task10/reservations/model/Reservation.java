@@ -5,7 +5,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@DynamoDBTable(tableName="Reservations")//cmtr-6e999703-Reservations-test
+@DynamoDBTable(tableName="cmtr-6e999703-Reservations-test")//cmtr-6e999703-Reservations-test
 public class Reservation {
 
     @JsonIgnore
