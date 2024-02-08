@@ -63,6 +63,7 @@ public class ApiHandlerSignin implements RequestHandler<APIGatewayProxyRequestEv
             result = cognito.initiateAuth(signInRequest);
             logger.info("result = " + result);
         } catch (Exception e) {
+            logger.info("Exception: " + e);
             APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
             response.setStatusCode(400);
             return response;
