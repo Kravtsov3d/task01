@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 public class ApiHandlerReservationsPost implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     private static final Logger logger = Logger.getLogger(ApiHandlerReservationsPost.class.getName());
+    private AmazonDynamoDB client;
 
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
         logger.info("Start ReservationsPost");
@@ -36,10 +37,10 @@ public class ApiHandlerReservationsPost implements RequestHandler<APIGatewayProx
         final Reservation reservation = convertFromJson(request.getBody(), Reservation.class);
         logger.info("reservation = " + reservation);
 
-        AmazonDynamoDB client = AmazonDynamoDBClientBuilder.defaultClient();
-        DynamoDBMapper mapper = new DynamoDBMapper(client);
+        client = AmazonDynamoDBClientBuilder.defaultClient();
 
-        PaginatedScanList<Table> tables = getTables(reservation, mapper);
+
+        PaginatedScanList<Table> tables = getTables(reservation);
         if (tables.isEmpty()) {
             logger.warning("tables.isEmpty() = " + tables.isEmpty());
             APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
@@ -47,7 +48,7 @@ public class ApiHandlerReservationsPost implements RequestHandler<APIGatewayProx
             return response;
         }
 
-        PaginatedScanList<Reservation> reservations = getReservations(reservation, mapper);
+        PaginatedScanList<Reservation> reservations = getReservations(reservation);
         if (!reservations.isEmpty()) {
             logger.warning("reservations.isEmpty() = " + reservations.isEmpty());
             APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
@@ -57,10 +58,11 @@ public class ApiHandlerReservationsPost implements RequestHandler<APIGatewayProx
 
         final String reservationId = UUID.randomUUID().toString();
         reservation.setReservationId(reservationId);
+        DynamoDBMapper mapper = new DynamoDBMapper(client);
 
         try {
             logger.info("Start save");
-            mapper.save(request);
+            mapper.save(reservation);
         } catch (Exception e) {
             logger.warning("Exception: " + e);
             APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
@@ -77,24 +79,41 @@ public class ApiHandlerReservationsPost implements RequestHandler<APIGatewayProx
         return responseEvent;
     }
 
-    private static PaginatedScanList<Table> getTables(final Reservation reservation, final DynamoDBMapper mapper) {
+    private PaginatedScanList<Table> getTables(final Reservation reservation) {
         Map<String, AttributeValue> eav = new HashMap<>();
-        eav.put(":tableNumberVal", new AttributeValue().withN(Integer.toString(reservation.getTableNumber())));
+        eav.put(":numberVal", new AttributeValue().withN(Integer.toString(reservation.getTableNumber())));
+
+        Map<String, String> ean = new HashMap<>();
+        ean.put("#numberAttr", "number");
 
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
-            .withFilterExpression("tableNumber = :tableNumberVal").withExpressionAttributeValues(eav);
+            .withFilterExpression("#numberAttr = :numberVal")
+            .withExpressionAttributeValues(eav)
+            .withExpressionAttributeNames(ean);
+
+        DynamoDBMapper mapper = new DynamoDBMapper(client);
+
+        logger.info("Start Table scan");
         return mapper.scan(Table.class, scanExpression);
     }
 
-    private static PaginatedScanList<Reservation> getReservations(final Reservation reservation, final DynamoDBMapper mapper) {
+    private PaginatedScanList<Reservation> getReservations(final Reservation reservation) {
         Map<String, AttributeValue> eav = new HashMap<>();
         eav.put(":tableNumberVal", new AttributeValue().withN(Integer.toString(reservation.getTableNumber())));
-        eav.put(":dateVal", new AttributeValue().withN(reservation.getDate()));
+        eav.put(":dateVal", new AttributeValue().withS(reservation.getDate()));
+
+        Map<String, String> ean = new HashMap<>();
+        ean.put("#tableNumberAttr", "tableNumber");
+        ean.put("#dateAttr", "date");
 
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
-            .withFilterExpression("tableNumber = :tableNumberVal")
-            .withFilterExpression("date = :dateVal")
-            .withExpressionAttributeValues(eav);
+            .withFilterExpression("#tableNumberAttr = :tableNumberVal and #dateAttr = :dateVal")
+            .withExpressionAttributeValues(eav)
+            .withExpressionAttributeNames(ean);
+
+        DynamoDBMapper mapper = new DynamoDBMapper(client);
+
+        logger.info("Start Reservation scan");
         return mapper.scan(Reservation.class, scanExpression);
     }
 }
