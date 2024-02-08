@@ -22,6 +22,7 @@ public class Reservation {
         return id;
     }
 
+    @JsonIgnore
     public void setId(final String id) {
         this.id = id;
     }
