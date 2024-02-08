@@ -40,13 +40,13 @@ public class ApiHandlerSignup implements RequestHandler<APIGatewayProxyRequestEv
 
         ListUserPoolsRequest listUserPoolsRequest = new ListUserPoolsRequest().withMaxResults(10);
         ListUserPoolsResult userPool = cognito.listUserPools(listUserPoolsRequest);
-        String userPoolId = userPool.getUserPools().get(0).getId();
+        String userPoolId = userPool.getUserPools().stream().filter(x -> x.getName().equals("cmtr-6e999703-simple-booking-userpool-test")).findFirst().get().getId();
         logger.info("userPoolId = " + userPoolId);
 
         ListUserPoolClientsRequest userPoolClientsRequest = new ListUserPoolClientsRequest().withUserPoolId(userPoolId);
         ListUserPoolClientsResult userPoolClientsResult = cognito.listUserPoolClients(userPoolClientsRequest);
 
-        String appClientId = userPoolClientsResult.getUserPoolClients().get(0).getClientId();
+        String appClientId = userPoolClientsResult.getUserPoolClients().stream().filter(x -> x.getClientName().equals("app-client")).findFirst().get().getClientId();
         logger.info("appClientId = " + appClientId);
 
         List<AttributeType> attributes = new ArrayList<>();
