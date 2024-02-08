@@ -236,7 +236,8 @@
         "GET": {
           "authorization_type": "authorizer",
           "integration_type": "lambda",
-          "lambda_name": "api_handler_reservations_get_all"
+          "lambda_name": "api_handler_reservations_get_all",
+          "enable_proxy": true
         },
         "POST": {
           "authorization_type": "authorizer",
