@@ -64,7 +64,7 @@
       }
     ],
     "client": {
-      "client_name": "cmtr-6e999703-app-client-test",
+      "client_name": "app-client",
       "generate_secret": false,
       "explicit_auth_flows": [
         "ALLOW_USER_PASSWORD_AUTH",

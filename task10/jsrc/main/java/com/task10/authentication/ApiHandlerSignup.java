@@ -34,6 +34,7 @@ public class ApiHandlerSignup implements RequestHandler<APIGatewayProxyRequestEv
         logger.info("Start Signup");
         logger.info("request = " + request);
         final SignupRequest signupRequest = convertFromJson(request.getBody(), SignupRequest.class);
+        logger.info("signupRequest = " + signupRequest);
 
         AWSCognitoIdentityProvider cognito = AWSCognitoIdentityProviderClientBuilder.defaultClient();
 
