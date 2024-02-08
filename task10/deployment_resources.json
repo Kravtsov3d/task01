@@ -32,7 +32,7 @@
   },
   "Reservations": {
     "resource_type": "dynamodb_table",
-    "hash_key_name": "id",
+    "hash_key_name": "reservationId",
     "hash_key_type": "S",
     "read_capacity": 1,
     "write_capacity": 1,
@@ -242,7 +242,8 @@
         "POST": {
           "authorization_type": "authorizer",
           "integration_type": "lambda",
-          "lambda_name": "api_handler_reservations_post"
+          "lambda_name": "api_handler_reservations_post",
+          "enable_proxy": true
         }
       }
     }

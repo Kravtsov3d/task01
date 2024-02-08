@@ -5,11 +5,11 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@DynamoDBTable(tableName="cmtr-6e999703-Reservations-test")//cmtr-6e999703-Reservations-test
+@DynamoDBTable(tableName="Reservations")//cmtr-6e999703-Reservations-test
 public class Reservation {
 
     @JsonIgnore
-    private String id;
+    private String reservationId;
     private Integer tableNumber;
     private String clientName;
     private String phoneNumber;
@@ -17,14 +17,14 @@ public class Reservation {
     private String slotTimeStart;
     private String slotTimeEnd;
 
-    @DynamoDBHashKey(attributeName="id")
-    public String getId() {
-        return id;
+    @DynamoDBHashKey(attributeName="reservationId")
+    public String getReservationId() {
+        return reservationId;
     }
 
     @JsonIgnore
-    public void setId(final String id) {
-        this.id = id;
+    public void setReservationId(final String reservationId) {
+        this.reservationId = reservationId;
     }
 
     @DynamoDBAttribute(attributeName="tableNumber")
