@@ -57,7 +57,7 @@ public class ApiHandlerReservationsPost implements RequestHandler<APIGatewayProx
         }
 
         final String reservationId = UUID.randomUUID().toString();
-        reservation.setReservationId(reservationId);
+        reservation.setId(reservationId);
         DynamoDBMapper mapper = new DynamoDBMapper(client);
 
         try {

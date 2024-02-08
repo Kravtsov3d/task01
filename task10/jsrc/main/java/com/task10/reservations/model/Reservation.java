@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Reservation {
 
     @JsonIgnore
-    private String reservationId;
+    private String id;
     private Integer tableNumber;
     private String clientName;
     private String phoneNumber;
@@ -17,14 +17,14 @@ public class Reservation {
     private String slotTimeStart;
     private String slotTimeEnd;
 
-    @DynamoDBHashKey(attributeName="reservationId")
-    public String getReservationId() {
-        return reservationId;
+    @DynamoDBHashKey(attributeName="id")
+    public String getId() {
+        return id;
     }
 
     @JsonIgnore
-    public void setReservationId(final String reservationId) {
-        this.reservationId = reservationId;
+    public void setId(final String id) {
+        this.id = id;
     }
 
     @DynamoDBAttribute(attributeName="tableNumber")
